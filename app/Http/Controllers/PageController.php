@@ -27,10 +27,16 @@ class PageController extends Controller
             'years_experience' => 'nullable|integer|min:0'
         ]);
 
-        Trainer::create($validated);
+        $trainer = Trainer::first();
+
+        if ($trainer) {
+            $trainer->update($validated);
+        } else {
+            Trainer::create($validated);
+        }
 
         return response()->json([
-            'message' => 'Trainer profile saved successfully',
+            'message' => 'Trainer profile saved',
 
         ]);
     }
@@ -45,5 +51,11 @@ class PageController extends Controller
         return response()->json([
             'message' => 'Message sent successfully'
         ]);
+    }
+
+    public function getTrainer()
+    {
+        $trainer = Trainer::first();
+        return response()->json($trainer);
     }
 }

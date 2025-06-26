@@ -62,10 +62,30 @@ export default {
 
                 const data = await response.json();
                 this.successMessage = data.message;
+                this.getTrainers();
             } catch (error) {
                 console.error(error);
             }
         },
+        async getTrainer() {
+            try {
+                const response = await fetch("/trainer-profile");
+                const data = await response.json();
+
+                // Fill the form with existing trainer data
+                this.form = {
+                    name: data.name || "",
+                    bio: data.bio || "",
+                    specialty: data.specialty || "",
+                    years_experience: data.years_experience || 0,
+                };
+            } catch (error) {
+                console.error("Failed to fetch trainer data", error);
+            }
+        },
+    },
+    mounted() {
+        this.getTrainer(); // Load the profile when page opens
     },
 };
 </script>
@@ -87,6 +107,9 @@ label {
     margin: 10px 0;
     display: block;
     font-weight: 600;
+}
+textarea {
+    min-height: 150px;
 }
 
 input,
