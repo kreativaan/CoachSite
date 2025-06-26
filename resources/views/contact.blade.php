@@ -12,6 +12,8 @@
 
 <body>
     <div id="app">
+
+        <nav-bar></nav-bar>
         <contact-form></contact-form>
     </div>
 </body>

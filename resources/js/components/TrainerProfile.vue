@@ -22,9 +22,10 @@
             </div>
 
             <button type="submit">Save Profile</button>
+            <p v-if="successMessage" style="color: green">
+                {{ successMessage }}
+            </p>
         </form>
-
-        <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
     </div>
 </template>
 

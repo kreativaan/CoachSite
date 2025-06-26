@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trainer;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -19,9 +20,18 @@ class PageController extends Controller
     public function saveTrainerProfile(Request $request)
     {
 
+        $validated = $request->validate([
+            'name' => 'required|string|max:225',
+            'bio' => 'nullable|string',
+            'specialty' => 'nullable|string|max:255',
+            'years_experience' => 'nullable|integer|min:0'
+        ]);
+
+        Trainer::create($validated);
+
         return response()->json([
-            'message' => 'Trainer profile save successfully',
-            'data' => request()->all(),
+            'message' => 'Trainer profile saved successfully',
+
         ]);
     }
 

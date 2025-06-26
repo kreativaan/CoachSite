@@ -9,6 +9,11 @@
 </head>
 
 <body>
+    <nav>
+        <a href="/about">About</a>
+        <a href="/trainer">Trainer</a>
+        <a href="/contact">Contact</a>
+    </nav>
     <h1>Laravel + Vue Example</h1>
 
     <div id="app">

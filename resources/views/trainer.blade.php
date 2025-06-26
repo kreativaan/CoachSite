@@ -10,6 +10,7 @@
 
 <body>
     <div id="app">
+        <nav-bar></nav-bar>
         <trainer-profile></trainer-profile>
     </div>
 </body>
