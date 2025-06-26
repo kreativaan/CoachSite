@@ -10,4 +10,18 @@ class PageController extends Controller
     {
         return view('about');
     }
+
+    public function trainer()
+    {
+        return view('trainer');
+    }
+
+    public function saveTrainerProfile(Request $request)
+    {
+
+        return response()->json([
+            'message' => 'Trainer profile save successfully',
+            'data' => request()->all(),
+        ]);
+    }
 }

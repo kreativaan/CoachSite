@@ -1,0 +1,100 @@
+<template>
+    <div class="trainer-form">
+        <h2>Trainer Profile</h2>
+        <form @submit.prevent="submitForm">
+            <div>
+                <label>Name:</label>
+                <input type="text" v-model="form.name" />
+            </div>
+
+            <div>
+                <label>Bio:</label>
+                <textarea v-model="form.bio"></textarea>
+            </div>
+
+            <div>
+                <label>Specialty:</label>
+                <input type="text" v-model="form.specialty" />
+            </div>
+
+            <div>
+                <label>Years Experience:</label>
+                <input type="number" v-model="form.years_experience" />
+            </div>
+
+            <button type="submit">Save Profile</button>
+        </form>
+
+        <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return {
+            form: {
+                name: "",
+                bio: "",
+                specialty: "",
+                years_experience: 0,
+            },
+            successMessage: "",
+        };
+    },
+    methods: {
+        async submitForm() {
+            try {
+                const response = await fetch("/trainer-profile", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                    body: JSON.stringify(this.form),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to submit form");
+                }
+
+                const data = await response.json();
+                this.successMessage = data.message;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+    },
+};
+</script>
+
+<style scoped>
+h2 {
+    font-weight: bold;
+}
+
+label {
+    margin: 10px 0;
+    display: block;
+    font-weight: 600;
+}
+
+input,
+textarea {
+    display: block;
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 300px;
+    background-color: rgb(238, 236, 236);
+    border-radius: 10px;
+}
+button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+}
+</style>

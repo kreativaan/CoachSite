@@ -8,3 +8,6 @@ Route::get('/', function () {
 });
 
 Route::get('/about', [PageController::class, 'about']);
+
+Route::get('/trainer', [PageController::class, 'trainer']);
+Route::post('trainer-profile', [PageController::class, 'saveTrainerProfile']);
