@@ -24,4 +24,16 @@ class PageController extends Controller
             'data' => request()->all(),
         ]);
     }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    public function sendMessage(Request $request)
+    {
+        return response()->json([
+            'message' => 'Message sent successfully'
+        ]);
+    }
 }

@@ -11,3 +11,6 @@ Route::get('/about', [PageController::class, 'about']);
 
 Route::get('/trainer', [PageController::class, 'trainer']);
 Route::post('trainer-profile', [PageController::class, 'saveTrainerProfile']);
+
+Route::get('/contact', [PageController::class, 'contact']);
+Route::post('/contact', [PageController::class, 'sendMessage']);

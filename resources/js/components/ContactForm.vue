@@ -1,30 +1,26 @@
 <template>
-    <div class="trainer-form">
+    <div class="form-container">
         <form @submit.prevent="submitForm">
-            <h2>Trainer Profile</h2>
+            <h2>Contact me</h2>
             <div>
-                <label>Name:</label>
-                <input type="text" v-model="form.name" />
+                <label>Your name </label>
+                <input type="text" v-model="form.name" required />
             </div>
 
             <div>
-                <label>Bio:</label>
-                <textarea v-model="form.bio"></textarea>
-            </div>
-            <div>
-                <label>Specialty:</label>
-                <input type="text" v-model="form.specialty" />
+                <label>Your email address </label>
+                <input type="email" v-model="form.email" required />
             </div>
 
             <div>
-                <label>Years Experience:</label>
-                <input type="number" v-model="form.years_experience" />
+                <label>Your message </label>
+                <textarea v-model="form.message" required></textarea>
             </div>
-
-            <button type="submit">Save Profile</button>
+            <button type="submit">Send</button>
+            <p v-if="successMessage" style="color: green">
+                {{ successMessage }}
+            </p>
         </form>
-
-        <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
     </div>
 </template>
 
@@ -34,9 +30,8 @@ export default {
         return {
             form: {
                 name: "",
-                bio: "",
-                specialty: "",
-                years_experience: 0,
+                email: "",
+                message: "",
             },
             successMessage: "",
         };
@@ -44,7 +39,7 @@ export default {
     methods: {
         async submitForm() {
             try {
-                const response = await fetch("/trainer-profile", {
+                const response = await fetch("/contact", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -56,7 +51,7 @@ export default {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Failed to submit form");
+                    throw new Error("Something went wrong");
                 }
 
                 const data = await response.json();
@@ -70,7 +65,7 @@ export default {
 </script>
 
 <style scoped>
-.trainer-form {
+.form-container {
     display: flex;
 
     padding: 2rem;
@@ -101,7 +96,7 @@ button {
     background-color: #3b82f6;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 0.5rem 1.5rem;
     border-radius: 6px;
 }
 </style>
