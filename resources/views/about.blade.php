@@ -3,31 +3,28 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>About the Trainer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>About us</title>
 </head>
 
-<body>
+<body class="bg-gray-100 text-gray-800">
     <div id="app">
         <nav-bar></nav-bar>
-        <h1>This is the About PAge</h1>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odit dignissimos voluptate nesciunt. Illo animi
-            dolor
-            totam. Fuga beatae consequuntur numquam nostrum nobis eos eveniet doloremque necessitatibus expedita?
-            Explicabo
-            neque vel sed dicta aut perferendis quisquam nihil velit tempore in ea laudantium similique quam, dolorem
-            consequatur laboriosam placeat nemo ratione reprehenderit quae distinctio veniam exercitationem! Itaque
-            nulla
-            iusto facilis repudiandae tempore velit, quam, labore incidunt eaque molestias voluptate asperiores esse
-            rerum!
-            Sed qui minima dolores blanditiis, sint dignissimos! Natus accusamus libero incidunt. Voluptatibus optio
-            nobis
-            quos reiciendis. Quod amet atque, pariatur ut repellat saepe modi excepturi mollitia inventore dolore in
-            omnis!
-        </p>
+        <div class="max-w-2xl mx-auto p-8 bg-white mt-12 rounded shadow">
+            <h1 class="text-2xl font-bold mb-4">Meet Your Trainer</h1>
+
+            @if ($trainer->profile_photo)
+                <img src="{{ asset('uploads/' . $trainer->profile_photo) }}" class="w-48 mb-4 rounded-lg shadow" />
+            @endif
+
+            <p><strong>Name:</strong> {{ $trainer->name }}</p>
+            <p><strong>Specialty:</strong> {{ $trainer->specialty }}</p>
+            <p><strong>Experience:</strong> {{ $trainer->years_experience }} years</p>
+            <p><strong>Bio:</strong></p>
+            <p class="mt-2">{{ $trainer->bio }}</p>
+        </div>
     </div>
 </body>
 

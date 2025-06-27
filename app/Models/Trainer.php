@@ -11,5 +11,6 @@ class Trainer extends Model
         'bio',
         'specialty',
         'years_experience',
+        'profile_photo'
     ];
 }

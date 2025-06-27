@@ -7,6 +7,19 @@
                 <input type="text" v-model="form.name" />
             </div>
 
+            <div v-if="form.profile_photo">
+                <h4 class="font-semibold mb-2">Current Profile Photo:</h4>
+                <img
+                    class="w-48 rounded-lg shadow-lg"
+                    :src="`/uploads/${form.profile_photo}`"
+                />
+            </div>
+
+            <div>
+                <label>Profile photo:</label>
+                <input type="file" @change="handleFileUpload" />
+            </div>
+
             <div>
                 <label>Bio:</label>
                 <textarea v-model="form.bio"></textarea>
@@ -43,17 +56,29 @@ export default {
         };
     },
     methods: {
+        handleFileUpload(event) {
+            this.profilePhotoFile = event.target.files[0];
+        },
+
         async submitForm() {
             try {
+                const formData = new FormData();
+                for (let key in this.form) {
+                    formData.append(key, this.form[key]);
+                }
+                if (this.profilePhotoFile) {
+                    formData.append("profile_photo", this.profilePhotoFile);
+                }
+
                 const response = await fetch("/trainer-profile", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
                         "X-CSRF-TOKEN": document
                             .querySelector('meta[name="csrf-token"]')
                             .getAttribute("content"),
                     },
-                    body: JSON.stringify(this.form),
+
+                    body: formData,
                 });
 
                 if (!response.ok) {
@@ -78,6 +103,7 @@ export default {
                     bio: data.bio || "",
                     specialty: data.specialty || "",
                     years_experience: data.years_experience || 0,
+                    profile_photo: data.profile_photo || "",
                 };
             } catch (error) {
                 console.error("Failed to fetch trainer data", error);
