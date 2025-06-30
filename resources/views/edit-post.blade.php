@@ -2,17 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Blog</title>
+    <title>Edit Post</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 h-full">
     <div id="app">
         <nav-bar></nav-bar>
-
-        <blog-form></blog-form>
+        <edit-post :id="{{ $id }}"></edit-post>
     </div>
 </body>
 

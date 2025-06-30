@@ -10,6 +10,8 @@
 
 <body class="bg-gray-100">
     <div id="app">
+        <nav-bar></nav-bar>
+
         <blog-list></blog-list>
 
     </div>

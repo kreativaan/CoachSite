@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 
-<body>
+<body class="h-full bg-gray-100">
     <div id="app">
 
         <nav-bar></nav-bar>

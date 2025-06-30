@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
+    <div class="max-w-xl mx-auto mt-8 bg-white p-6 rounded-lg shadow">
         <h2 class="text-xl font-bold mb-4">Create Blog Post</h2>
         <form @submit.prevent="submitPost">
             <div class="mb-4">

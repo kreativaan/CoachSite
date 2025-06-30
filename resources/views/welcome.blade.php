@@ -17,6 +17,8 @@
     <h1>Laravel + Vue Example</h1>
 
     <div id="app">
+        <nav-bar></nav-bar>
+
         <example-component></example-component>
     </div>
 </body>

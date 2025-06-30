@@ -1,7 +1,9 @@
 <template>
-    <div class="form-container">
+    <div
+        class="bg-white flex justify-center items-center w-2xl rounded-2xl mx-auto mt-8"
+    >
         <form @submit.prevent="submitForm">
-            <h2>Contact me</h2>
+            <h2 class="mt-5">Contact me</h2>
             <div>
                 <label>Your name </label>
                 <input type="text" v-model="form.name" required />
@@ -16,7 +18,7 @@
                 <label>Your message </label>
                 <textarea v-model="form.message" required></textarea>
             </div>
-            <button type="submit">Send</button>
+            <button class="mb-8" type="submit">Send</button>
             <p v-if="successMessage" style="color: green">
                 {{ successMessage }}
             </p>
