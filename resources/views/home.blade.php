@@ -5,8 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Home | CoachSite</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <title>Home | CoachSite</title>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
@@ -15,7 +16,7 @@
         <nav-bar></nav-bar>
 
         <!-- Hero Section -->
-        <section class="bg-blue-500 text-white py-16 text-center">
+        <section class="bg-blue-400 text-white py-16 text-center">
             <h1 class="text-4xl font-bold mb-4">Welcome to CoachSite</h1>
             <p class="text-xl mb-6">Your personal fitness coach and guide</p>
             <a href="/contact"
@@ -35,10 +36,10 @@
         </section>
 
         <!-- Blog Preview (Vue Component) -->
-        <section class="bg-white py-12 ">
-            <div class="max-w-6xl mx-auto px-4 ">
+        <section class="bg-white py-12">
+            <div class="max-w-7xl mx-auto px-4 ">
                 <h2 class="text-2xl font-bold mb-6">Latest Blog Posts</h2>
-                <blog-preview />
+                <blog-preview class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" />
             </div>
         </section>
     </div>

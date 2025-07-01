@@ -5,12 +5,17 @@
         <div
             v-for="post in posts.slice(0, 3)"
             :key="post.id"
-            class="mb-6 bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition"
+            class="mb-6 bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition hover:scale-101"
         >
             <a :href="`/blog/${post.id}`">
                 <h3 class="text-xl font-semibold text-blue-600 mb-2">
                     {{ post.title }}
                 </h3>
+                <!-- <img
+                    :src="`/uploads/${post.image}`"
+                    class="max-h-25 rounded-md"
+                    alt="Post image"
+                /> -->
                 <p class="text-gray-700 mb-2">{{ preview(post.content) }}</p>
                 <p class="text-sm text-gray-500">
                     {{ formatDate(post.created_at) }}

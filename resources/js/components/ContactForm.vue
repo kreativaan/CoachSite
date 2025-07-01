@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white flex justify-center items-center w-2xl rounded-2xl mx-auto mt-8"
+        class="bg-white flex justify-center items-center max-w-2xl rounded-2xl mx-auto mt-8 shadow-md"
     >
         <form @submit.prevent="submitForm">
             <h2 class="mt-5">Contact me</h2>

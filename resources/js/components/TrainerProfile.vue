@@ -1,5 +1,7 @@
 <template>
-    <div class="trainer-form">
+    <div
+        class="bg-white py-8 max-w-2xl rounded-xl flex justify-center mx-auto mt-8 mb-20 shadow-md"
+    >
         <form @submit.prevent="submitForm">
             <h2>Trainer Profile</h2>
             <div>
@@ -117,14 +119,6 @@ export default {
 </script>
 
 <style scoped>
-.trainer-form {
-    display: flex;
-
-    padding: 2rem;
-    justify-content: center;
-    margin: auto;
-}
-
 h2 {
     font-weight: bold;
 }

@@ -38,7 +38,7 @@
                 Delete
             </button>
         </div>
-        <CommentSection :post-id="id" />
+        <CommentSection :post-id="id"></CommentSection>
     </div>
 </template>
 

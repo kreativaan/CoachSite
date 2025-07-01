@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
 
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" class="bg-gray-100 pb-10">
         <nav-bar></nav-bar>
         <trainer-profile></trainer-profile>
     </div>
