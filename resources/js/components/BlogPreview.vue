@@ -5,7 +5,7 @@
         <div
             v-for="post in posts.slice(0, 3)"
             :key="post.id"
-            class="mb-6 bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition hover:scale-101"
+            class="mb-6 bg-gray-50 p-4 rounded-lg shadow hover:shadow-md hover:scale-105 transition"
         >
             <a :href="`/blog/${post.id}`">
                 <h3 class="text-xl font-semibold text-blue-600 mb-2">

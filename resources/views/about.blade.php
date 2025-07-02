@@ -1,30 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <title>About the Trainer</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('title', 'About the Trainer')
 
-<body class="bg-gray-100 text-gray-800">
-    <div id="app">
-        <nav-bar></nav-bar>
-        <div class="max-w-2xl mx-auto p-8 bg-white mt-12 rounded shadow">
-            <h1 class="text-2xl font-bold mb-4">Meet Your Trainer</h1>
+@section('content')
 
-            @if ($trainer->profile_photo)
-                <img src="{{ asset('uploads/' . $trainer->profile_photo) }}" class="w-48 mb-4 rounded-lg shadow" />
-            @endif
+    <body class="bg-gray-100 text-gray-800 mt-16">
+        <div id="app">
+            <nav-bar></nav-bar>
+            <div class="max-w-2xl mx-auto p-8 bg-white mt-12 rounded shadow">
+                <h1 class="text-2xl font-bold mb-4">Meet Your Trainer</h1>
 
-            <p><strong>Name:</strong> {{ $trainer->name }}</p>
-            <p><strong>Specialty:</strong> {{ $trainer->specialty }}</p>
-            <p><strong>Experience:</strong> {{ $trainer->years_experience }} years</p>
-            <p><strong>Bio:</strong></p>
-            <p class="mt-2">{{ $trainer->bio }}</p>
+                @if ($trainer->profile_photo)
+                    <img src="{{ asset('uploads/' . $trainer->profile_photo) }}" class="w-48 mb-4 rounded-lg shadow" />
+                @endif
+
+                <p><strong>Name:</strong> {{ $trainer->name }}</p>
+                <p><strong>Specialty:</strong> {{ $trainer->specialty }}</p>
+                <p><strong>Experience:</strong> {{ $trainer->years_experience }} years</p>
+                <p><strong>Bio:</strong></p>
+                <p class="mt-2">{{ $trainer->bio }}</p>
+            </div>
         </div>
-    </div>
-</body>
 
-</html>
+    @endsection

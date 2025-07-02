@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white flex justify-center items-center max-w-2xl rounded-2xl mx-auto mt-8 shadow-md"
+        class="bg-white flex justify-center items-center max-w-2xl rounded-2xl mx-auto shadow-md mt-16"
     >
         <form @submit.prevent="submitForm">
             <h2 class="mt-5">Contact me</h2>
@@ -13,7 +13,6 @@
                 <label>Your email address </label>
                 <input type="email" v-model="form.email" required />
             </div>
-
             <div>
                 <label>Your message </label>
                 <textarea v-model="form.message" required></textarea>

@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-6xl mx-auto p-6">
+    <div class="max-w-6xl mx-auto p-6 mt-16">
         <h1 class="text-3xl font-bold mb-6">Latest Blog Posts</h1>
 
         <div v-if="posts.length === 0" class="text-gray-600 text-center mt-10">

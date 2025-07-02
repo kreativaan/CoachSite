@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white py-8 max-w-2xl rounded-xl flex justify-center mx-auto mt-8 mb-20 shadow-md"
+        class="bg-white py-8 max-w-2xl rounded-xl flex justify-center mx-auto mb-20 shadow-md"
     >
         <form @submit.prevent="submitForm">
             <h2>Trainer Profile</h2>

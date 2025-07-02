@@ -30,17 +30,27 @@ Route::get('/blog/{id}', function ($id) {
     return view('blog-post', ['id' => $id]);
 });
 
+//admin
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::view('/admin/blog', 'admin-blog');
 
-Route::get('/admin/blog', function () {
-    if (!Auth::check() || !Auth::user()->is_admin) {
-        abort(403, 'Unauthorized');
-    }
+    Route::get('/admin/blog/edit/{id}', function ($id) {
+        return view('edit-post', ['id' => $id]);
+    });
 
-    return view('admin-blog');
+    Route::post('/posts', [PostController::class, 'store']);
+
+    Route::put('/api/posts/{id}', [PostController::class, 'update']);
+
+    Route::delete('/api/posts/{id}', [PostController::class, 'destroy']);
+
+    Route::get('/trainer', [PageController::class, 'trainer']);
+
+    Route::post('/trainer-profile', [PageController::class, 'saveTrainerProfile']);
 });
-Route::get('/admin/blog/edit/{id}', function ($id) {
-    return view('edit-post', ['id' => $id]);
-});
+
+
+
 
 // Comments
 Route::post('/comments', [CommentController::class, 'store']);

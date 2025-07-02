@@ -1,6 +1,6 @@
 <template>
     <div
-        class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-6 mb-20"
+        class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-16 mb-20"
         v-if="post"
     >
         <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
@@ -23,8 +23,7 @@
             Posted on: {{ formatDate(post.created_at) }}
         </p>
 
-        <!-- ✅ Move buttons inside the same div with v-if="post" -->
-        <div class="flex gap-4 mt-6">
+        <div v-if="user && user.is_admin" class="flex gap-4 mt-6">
             <a
                 :href="`/admin/blog/edit/${post.id}`"
                 class="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
@@ -49,6 +48,7 @@ export default {
     data() {
         return {
             post: null,
+            user: window.authUser || null,
         };
     },
     components: {
