@@ -9,7 +9,20 @@
         <!-- if logged in -->
         <a v-if="user && user.is_admin" href="/trainer">Edit trainer</a>
         <a v-if="user && user.is_admin" href="/admin/blog">Create a post</a>
-        <a v-if="user && user.is_admin" href="/admin/messages">Inbox</a>
+
+        <div class="relative inline-block">
+            <a
+                v-if="user && user.is_admin"
+                href="/admin/messages"
+                class="relative"
+            >
+                Inbox
+                <span
+                    v-if="hasMessages"
+                    class="bg-red-500 rounded-full h-2 w-2 absolute top-0 right-0 transform translate-x-2.5 -translate-y-1/5"
+                ></span>
+            </a>
+        </div>
     </nav>
 </template>
 
@@ -18,7 +31,19 @@ export default {
     data() {
         return {
             user: window.authUser || null,
+            hasMessages: false,
         };
+    },
+    async mounted() {
+        if (this.user && this.user.is_admin) {
+            try {
+                const res = await fetch("/api/messages/count");
+                const data = await res.json();
+                this.hasMessages = data.count > 0;
+            } catch (err) {
+                console.error("Failed to fetch message count", err);
+            }
+        }
     },
 };
 </script>

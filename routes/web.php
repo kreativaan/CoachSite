@@ -50,6 +50,9 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::post('/trainer-profile', [PageController::class, 'saveTrainerProfile']);
     //messages
     Route::get('/admin/messages', [MessageController::class, 'index']);
+    Route::get('/api/messages/count', function () {
+        return response()->json(['count' => \App\Models\Message::count()]);
+    });
 });
 
 
