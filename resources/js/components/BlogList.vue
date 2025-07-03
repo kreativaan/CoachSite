@@ -11,8 +11,18 @@
 
         <h1 class="text-3xl font-bold mb-8">Latest Blog Posts</h1>
 
-        <div v-if="posts.length === 0" class="text-gray-600 text-center mt-10">
+        <div
+            v-if="posts.length === 0 && !searchPerformed"
+            class="text-gray-600 text-center mt-10"
+        >
             No posts yet.
+        </div>
+        <div
+            v-if="posts.length === 0 && searchPerformed"
+            class="text-gray-600 text-center mt-10"
+        >
+            No results found for
+            <span class="font-semibold">"{{ searchQuery }}"</span>
         </div>
         <!-- posts -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -66,9 +76,18 @@ export default {
             currentPage: 1,
             lastPage: 1,
             searchQuery: "",
+            searchPerformed: false,
         };
     },
     methods: {
+        debounce(func, wait = 300) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        },
+
         async fetchPosts(page = 1) {
             const response = await fetch(
                 `/api/posts?page=${page}&search=${this.searchQuery}`
@@ -78,15 +97,16 @@ export default {
             this.posts = data.data;
             this.currentPage = data.current_page;
             this.lastPage = data.last_page;
-        },
-        search() {
-            this.fetchPosts(1); // reset to page 1 when searching
+            this.searchPerformed = true;
         },
         goToPage(page) {
             this.fetchPosts(page);
         },
     },
     mounted() {
+        this.search = this.debounce(() => {
+            this.fetchPosts(1);
+        });
         this.fetchPosts();
     },
 };

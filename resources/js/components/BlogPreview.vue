@@ -5,19 +5,19 @@
         <div
             v-for="post in posts.slice(0, 3)"
             :key="post.id"
-            class="mb-6 bg-gray-50 p-4 rounded-lg shadow hover:shadow-md hover:scale-105 transition"
+            class="mb-6 bg-gray-50 p-4 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition relative"
         >
             <a :href="`/blog/${post.id}`">
                 <h3 class="text-xl font-semibold text-blue-600 mb-2">
-                    {{ post.title }}
+                    {{ previewTitle(post.title) }}
                 </h3>
                 <p class="text-gray-700 mb-2">{{ preview(post.content) }}</p>
                 <img
                     :src="`/uploads/${post.image}`"
-                    class="rounded-md max-w-64 align-center justify-center"
+                    class="rounded-md max-w-64 align-center justify-center mb-5"
                     alt="Post image"
                 />
-                <p class="text-sm text-gray-500">
+                <p class="text-sm text-gray-400 mt-2 absolute bottom-2">
                     {{ formatDate(post.created_at) }}
                 </p>
             </a>
@@ -38,9 +38,14 @@ export default {
             const data = await response.json();
             this.posts = data.data; // Fix: use data.data for paginated response
         },
-        preview(content) {
+        previewTitle(content) {
             return content.length > 100
                 ? content.slice(0, 100) + "..."
+                : content;
+        },
+        preview(content) {
+            return content.length > 200
+                ? content.slice(0, 200) + "..."
                 : content;
         },
         formatDate(dateStr) {
