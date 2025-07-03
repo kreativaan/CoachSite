@@ -1,12 +1,6 @@
-@extends('layouts.app')
+<x-app-layout>
 
-@section('title', 'Blog Post')
 
-@section('content')
+    <blog-post :id="{{ $id }}"></blog-post>
 
-    <body class="bg-gray-100">
-        <div id="app">
-            <nav-bar></nav-bar>
-            <blog-post :id="{{ $id }}"></blog-post>
-        </div>
-    @endsection
+</x-app-layout>

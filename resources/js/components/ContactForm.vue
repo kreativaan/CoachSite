@@ -18,14 +18,15 @@
                 <textarea v-model="form.message" required></textarea>
             </div>
             <button class="mb-8" type="submit">Send</button>
-            <p v-if="successMessage" style="color: green">
-                {{ successMessage }}
-            </p>
+            <div class="pb-10">
+                <SuccessMessage :message="successMessage" />
+            </div>
         </form>
     </div>
 </template>
 
 <script>
+import SuccessMessage from "./SuccessMessage.vue";
 export default {
     data() {
         return {
@@ -36,6 +37,9 @@ export default {
             },
             successMessage: "",
         };
+    },
+    components: {
+        SuccessMessage,
     },
     methods: {
         async submitForm() {

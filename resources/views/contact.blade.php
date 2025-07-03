@@ -1,13 +1,6 @@
-@extends('layouts.app')
+<x-app-layout title="Contact">
 
-@section('title', 'Contact')
 
-@section('content')
+    <contact-form></contact-form>
 
-    <body class="h-full bg-gray-100">
-        <div id="app">
-
-            <nav-bar></nav-bar>
-            <contact-form></contact-form>
-        </div>
-    @endsection
+</x-app-layout>

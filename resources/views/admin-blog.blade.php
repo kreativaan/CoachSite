@@ -1,13 +1,5 @@
-@extends('layouts.app')
+<x-app-layout title="Admin Blog">
 
-@section('title', 'Admin Blog')
+    <blog-form></blog-form>
 
-@section('content')
-
-    <body class="bg-gray-100">
-        <div id="app">
-            <nav-bar></nav-bar>
-
-            <blog-form></blog-form>
-        </div>
-    @endsection
+</x-app-layout>

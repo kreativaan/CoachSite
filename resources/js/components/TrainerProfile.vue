@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white py-8 max-w-2xl rounded-xl flex justify-center mx-auto mb-20 shadow-md"
+        class="bg-white py-8 max-w-2xl rounded-xl flex justify-center mx-auto mb-20 shadow-md mt-16"
     >
         <form @submit.prevent="submitForm">
             <h2>Trainer Profile</h2>
@@ -37,14 +37,13 @@
             </div>
 
             <button type="submit">Save Profile</button>
-            <p v-if="successMessage" style="color: green">
-                {{ successMessage }}
-            </p>
+            <SuccessMessage :message="successMessage" />
         </form>
     </div>
 </template>
 
 <script>
+import SuccessMessage from "./SuccessMessage.vue";
 export default {
     data() {
         return {
@@ -56,6 +55,9 @@ export default {
             },
             successMessage: "",
         };
+    },
+    components: {
+        SuccessMessage,
     },
     methods: {
         handleFileUpload(event) {

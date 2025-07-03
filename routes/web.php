@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 
 // Public Pages
@@ -47,6 +48,8 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/trainer', [PageController::class, 'trainer']);
 
     Route::post('/trainer-profile', [PageController::class, 'saveTrainerProfile']);
+    //messages
+    Route::get('/admin/messages', [MessageController::class, 'index']);
 });
 
 

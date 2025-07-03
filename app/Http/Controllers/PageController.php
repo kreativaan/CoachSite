@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
 use App\Models\Trainer;
 use Illuminate\Http\Request;
 
@@ -67,9 +68,15 @@ class PageController extends Controller
 
     public function sendMessage(Request $request)
     {
-        return response()->json([
-            'message' => 'Message sent successfully'
+        $validate = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string',
         ]);
+
+        Message::create($validate);
+
+        return response()->json(['message' => 'Message sent successfully']);
     }
 
     public function getTrainer()

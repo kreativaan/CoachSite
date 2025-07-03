@@ -1,6 +1,6 @@
 <template>
     <nav
-        class="bg-blue-500 text-white flex justify-center font-semibold gap-5 py-1.5 fixed top-0 w-full"
+        class="bg-blue-500 text-white flex justify-center font-semibold gap-5 py-1.5 fixed top-0 w-full z-50"
     >
         <a href="/">Home</a>
         <a href="/about">About</a>
@@ -9,6 +9,7 @@
         <!-- if logged in -->
         <a v-if="user && user.is_admin" href="/trainer">Edit trainer</a>
         <a v-if="user && user.is_admin" href="/admin/blog">Create a post</a>
+        <a v-if="user && user.is_admin" href="/admin/messages">Inbox</a>
     </nav>
 </template>
 

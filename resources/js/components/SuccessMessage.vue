@@ -23,7 +23,7 @@ export default {
                 this.visible = true;
                 setTimeout(() => {
                     this.visible = false;
-                }, 3600); //
+                }, 3000); //
             }
         },
     },
