@@ -16,9 +16,17 @@ class PostController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Post::latest()->get());
+        $query = Post::query();
+
+        if ($search = $request->input('search')) {
+            $query->where('title', 'like', "%{$search}%")->orWhere('content', 'like', "%{$search}%");
+        }
+        $post = $query->latest()->paginate(6);
+
+
+        return response()->json($post);
     }
 
     /**

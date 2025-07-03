@@ -11,12 +11,12 @@
                 <h3 class="text-xl font-semibold text-blue-600 mb-2">
                     {{ post.title }}
                 </h3>
-                <!-- <img
-                    :src="`/uploads/${post.image}`"
-                    class="max-h-25 rounded-md"
-                    alt="Post image"
-                /> -->
                 <p class="text-gray-700 mb-2">{{ preview(post.content) }}</p>
+                <img
+                    :src="`/uploads/${post.image}`"
+                    class="rounded-md max-w-64 align-center justify-center"
+                    alt="Post image"
+                />
                 <p class="text-sm text-gray-500">
                     {{ formatDate(post.created_at) }}
                 </p>
@@ -35,7 +35,8 @@ export default {
     methods: {
         async fetchPosts() {
             const response = await fetch("/api/posts");
-            this.posts = await response.json();
+            const data = await response.json();
+            this.posts = data.data; // Fix: use data.data for paginated response
         },
         preview(content) {
             return content.length > 100

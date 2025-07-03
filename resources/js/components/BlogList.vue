@@ -1,33 +1,59 @@
 <template>
     <div class="max-w-6xl mx-auto p-6 mt-16">
-        <h1 class="text-3xl font-bold mb-6">Latest Blog Posts</h1>
+        <!-- Search -->
+        <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="Search posts..."
+            @input="search"
+            class="border border-gray-300 rounded-xl p-2 w-full mb-6"
+        />
+
+        <h1 class="text-3xl font-bold mb-8">Latest Blog Posts</h1>
 
         <div v-if="posts.length === 0" class="text-gray-600 text-center mt-10">
             No posts yet.
         </div>
-
-        <div class="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <a
-                :href="`/blog/${post.id}`"
+        <!-- posts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
                 v-for="post in posts"
                 :key="post.id"
-                class="bg-white rounded-xl shadow-lg p-4 hover:shadow-2xl hover:scale-[1.01] transition-all duration-300"
+                class="bg-white rounded-xl overflow-hidden shadow-xl transition mb-6 hover:scale-105 hover:shadow-2xl"
             >
-                <h2 class="text-xl font-semibold mb-2">{{ post.title }}</h2>
-
-                <div v-if="post.image" class="mb-4 flex justify-center">
+                <a :href="`/blog/${post.id}`">
                     <img
+                        v-if="post.image"
                         :src="`/uploads/${post.image}`"
-                        class="max-h-48 w-full object-cover rounded-md"
                         alt="Post image"
+                        class="w-full h-64 object-cover"
                     />
-                </div>
+                    <div class="p-4">
+                        <h2 class="text-xl font-bold mb-2 text-blue-600">
+                            {{ post.title }}
+                        </h2>
+                        <p class="text-gray-700">
+                            {{ post.content.slice(0, 150) }}...
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
 
-                <p class="text-gray-700 mb-2">{{ preview(post.content) }}</p>
-                <p class="text-sm text-gray-500">
-                    {{ formatDate(post.created_at) }}
-                </p>
-            </a>
+        <!-- Pagination -->
+        <div class="flex space-x-2 justify-center mt-4">
+            <button
+                v-for="page in lastPage"
+                :key="page"
+                @click="goToPage(page)"
+                :class="{
+                    'bg-blue-500 text-white': currentPage === page,
+                    'bg-gray-200': currentPage !== page,
+                }"
+                class="px-3 py-1 rounded"
+            >
+                {{ page }}
+            </button>
         </div>
     </div>
 </template>
@@ -37,30 +63,27 @@ export default {
     data() {
         return {
             posts: [],
+            currentPage: 1,
+            lastPage: 1,
+            searchQuery: "",
         };
     },
     methods: {
-        async fetchPosts() {
-            try {
-                const response = await fetch("/api/posts");
-                const data = await response.json();
-                this.posts = data;
-            } catch (error) {
-                console.error("Failed to load posts:", error);
-            }
+        async fetchPosts(page = 1) {
+            const response = await fetch(
+                `/api/posts?page=${page}&search=${this.searchQuery}`
+            );
+            const data = await response.json();
+
+            this.posts = data.data;
+            this.currentPage = data.current_page;
+            this.lastPage = data.last_page;
         },
-        preview(content) {
-            return content.length > 200
-                ? content.slice(0, 200) + "..."
-                : content;
+        search() {
+            this.fetchPosts(1); // reset to page 1 when searching
         },
-        formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-            });
+        goToPage(page) {
+            this.fetchPosts(page);
         },
     },
     mounted() {
