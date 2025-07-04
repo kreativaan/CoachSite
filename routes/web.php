@@ -8,6 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home']);
@@ -16,17 +17,17 @@ Route::get('/contact', [PageController::class, 'contact']);
 Route::post('/contact', [PageController::class, 'sendMessage']);
 
 // Trainer
-Route::get('/trainer', [PageController::class, 'trainer']);
-Route::post('/trainer-profile', [PageController::class, 'saveTrainerProfile']);
+// Route::get('/trainer', [PageController::class, 'trainer']);
+// Route::post('/trainer-profile', [PageController::class, 'saveTrainerProfile']);
 Route::get('/trainer-profile', [PageController::class, 'getTrainer']);
 
 // Blog Routes
 Route::view('/blog', 'blog');
 Route::get('/api/posts', [PostController::class, 'index']);
-Route::post('/posts', [PostController::class, 'store']);
+// Route::post('/posts', [PostController::class, 'store']);
 Route::get('/api/posts/{id}', [PostController::class, 'show']);
-Route::put('/api/posts/{id}', [PostController::class, 'update']);
-Route::delete('/api/posts/{id}', [PostController::class, 'destroy']);
+// Route::put('/api/posts/{id}', [PostController::class, 'update']);
+// Route::delete('/api/posts/{id}', [PostController::class, 'destroy']);
 Route::get('/blog/{id}', function ($id) {
     return view('blog-post', ['id' => $id]);
 });
@@ -68,9 +69,9 @@ Route::get('api/posts/{id}/comments', function ($id) {
 //breeze
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'is_admin'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

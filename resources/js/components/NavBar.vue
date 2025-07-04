@@ -23,6 +23,19 @@
                 ></span>
             </a>
         </div>
+        <a v-if="user && user.is_admin" href="/dashboard">Dashboard</a>
+        <div class="absolute right-4 top-1">
+            <form method="POST" action="/logout">
+                <input type="hidden" name="_token" :value="csrf" />
+                <button
+                    v-if="user"
+                    type="submit"
+                    class="font-semibold text-white hover:text-red-500"
+                >
+                    Logout
+                </button>
+            </form>
+        </div>
     </nav>
 </template>
 
@@ -30,6 +43,9 @@
 export default {
     data() {
         return {
+            csrf: document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
             user: window.authUser || null,
             hasMessages: false,
         };
