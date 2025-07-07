@@ -24,4 +24,15 @@ class CommentController extends Controller
 
         return response()->json(['message' => 'Comment added!', 'comment' => $comment]);
     }
+    public function reply(Request $request, $id)
+    {
+        $request->validate([
+            'admin_reply' => 'required|string'
+        ]);
+        $comment = Comment::findOrFail($id);
+        $comment->admin_reply = $request->admin_reply;
+        $comment->save();
+
+        return response()->json(['message' => 'Reply saved']);
+    }
 }

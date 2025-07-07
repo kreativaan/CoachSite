@@ -14,4 +14,23 @@ class MessageController extends Controller
 
         return view('admin-message', ['messages' => $messages]);
     }
+
+    public function show($id)
+    {
+        $message = Message::findOrFail($id);
+        $message->update(['is_read' => false]);
+
+        return view('message-show', compact('message'));
+    }
+    public function reply(Request $request, $id)
+    {
+        $request->validate([
+            'reply' => 'required|string',
+        ]);
+        $message = Message::findOrFail($id);
+        $message->reply = $request->reply;
+        $message->save();
+
+        return redirect()->route('messages.show', $id)->with('success', 'Reply saved');
+    }
 }

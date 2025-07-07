@@ -14,6 +14,92 @@
         >
             <p class="font-semibold">{{ comment.name }}</p>
             <p class="text-gray-700">{{ comment.content }}</p>
+
+            <!-- Show admin reply if it exists -->
+            <div
+                v-if="comment.admin_reply"
+                class="bg-gray-100 p-2 mt-3 rounded text-sm text-blue-800"
+            >
+                <div v-if="editingReplyFor !== comment.id">
+                    <strong>Admin:</strong> {{ comment.admin_reply }}
+
+                    <!-- Edit/Delete buttons -->
+                    <div
+                        v-if="user && user.is_admin"
+                        class="mt-2 flex gap-2 text-sm"
+                    >
+                        <button
+                            @click="startEditingReply(comment)"
+                            class="text-yellow-600 hover:underline"
+                        >
+                            ✏️ Edit
+                        </button>
+                        <button
+                            @click="deleteReply(comment.id)"
+                            class="text-red-600 hover:underline"
+                        >
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Edit Form -->
+                <div v-else>
+                    <textarea
+                        v-model="adminReplies[comment.id]"
+                        rows="2"
+                        class="w-full p-2 border rounded"
+                    ></textarea>
+                    <div class="flex gap-2 mt-2">
+                        <button
+                            @click="submitReply(comment.id)"
+                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                        >
+                            Save
+                        </button>
+                        <button
+                            @click="cancelEdit()"
+                            class="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Show reply form if admin and no reply yet -->
+            <div v-else-if="user && user.is_admin" class="mt-4">
+                <div v-if="showReplyFormFor !== comment.id">
+                    <a
+                        href="#"
+                        @click.prevent="showReplyFormFor = comment.id"
+                        class="text-blue-600 hover:underline text-sm"
+                        >Reply</a
+                    >
+                </div>
+                <div v-else>
+                    <textarea
+                        v-model="adminReplies[comment.id]"
+                        rows="2"
+                        class="w-full p-2 border rounded"
+                        placeholder="Reply to this comment..."
+                    ></textarea>
+                    <div class="flex gap-2 mt-2">
+                        <button
+                            @click="submitReply(comment.id)"
+                            class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                        >
+                            Submit Reply
+                        </button>
+                        <button
+                            @click="showReplyFormFor = null"
+                            class="bg-gray-400 text-white px-4 py-1 rounded hover:bg-gray-500"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <form @submit.prevent="submitComment" class="mt-12">
@@ -54,10 +140,13 @@
 import SuccessMessage from "./SuccessMessage.vue";
 
 export default {
-    props: ["postId"],
+    props: ["postId", "user"],
     data() {
         return {
+            showReplyFormFor: null,
+            editingReplyFor: null,
             comments: [],
+            adminReplies: {},
             form: {
                 name: "",
                 content: "",
@@ -105,8 +194,98 @@ export default {
                 console.error("Error:", err);
             }
         },
+        async submitReply(commentId) {
+            try {
+                const response = await fetch(
+                    `/api/comments/${commentId}/reply`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document
+                                .querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content"),
+                        },
+                        body: JSON.stringify({
+                            admin_reply: this.adminReplies[commentId],
+                        }),
+                    }
+                );
+
+                if (!response.ok) throw new Error("Failed to reply");
+
+                this.adminReplies[commentId] = ""; // clear the input
+                this.editingReplyFor = null;
+                await this.fetchComments(); // reload to show new reply
+            } catch (err) {
+                console.error("Reply failed:", err);
+            }
+        },
+        startEditingReply(comment) {
+            this.editingReplyFor = comment.id;
+            this.adminReplies[comment.id] = comment.admin_reply;
+        },
+        cancelEdit() {
+            this.editingReplyFor = null;
+        },
+        async deleteReply(commentId) {
+            if (!confirm("Are you sure you want to delete this reply?")) return;
+
+            try {
+                const response = await fetch(
+                    `/api/comments/${commentId}/reply`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document
+                                .querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content"),
+                        },
+                    }
+                );
+
+                if (!response.ok) throw new Error("Failed to delete reply");
+
+                this.fetchComments(); // refresh comments
+            } catch (err) {
+                console.error("Delete failed:", err);
+            }
+        },
+        startEditingReply(comment) {
+            this.editingReplyFor = comment.id;
+            this.adminReplies[comment.id] = comment.admin_reply;
+        },
+        cancelEdit() {
+            this.editingReplyFor = null;
+        },
+        async deleteReply(commentId) {
+            if (!confirm("Are you sure you want to delete this reply?")) return;
+
+            try {
+                const response = await fetch(
+                    `/api/comments/${commentId}/reply`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document
+                                .querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content"),
+                        },
+                    }
+                );
+
+                if (!response.ok) throw new Error("Failed to delete reply");
+
+                this.fetchComments(); // refresh comments
+            } catch (err) {
+                console.error("Delete failed:", err);
+            }
+        },
     },
     mounted() {
+        console.log("User passed to CommentSection:", this.user);
         this.fetchComments();
     },
 };

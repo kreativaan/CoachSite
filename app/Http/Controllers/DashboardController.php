@@ -17,11 +17,16 @@ class DashboardController extends Controller
         $unreadMessageCount = Message::where('is_read', false)->count();
         $adminName = Auth::user()->name;
 
+        $recentPosts = Post::latest()->take(3)->get();
+        $recentMessages = Message::latest()->take(3)->get();
+
         return view('dashboard', [
             'postCount' => $postCount,
             'messageCount' => $messageCount,
             'unreadMessageCount' => $unreadMessageCount,
             'adminName' => $adminName,
+            'recentPosts' => $recentPosts,
+            'recentMessages' => $recentMessages,
         ]);
     }
 }

@@ -23,7 +23,7 @@
             Posted on: {{ formatDate(post.created_at) }}
         </p>
 
-        <div v-if="user && user.is_admin" class="flex gap-4 mt-6">
+        <div v-if="authUser && authUser.is_admin" class="flex gap-4 mt-6">
             <a
                 :href="`/admin/blog/edit/${post.id}`"
                 class="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
@@ -37,7 +37,8 @@
                 Delete
             </button>
         </div>
-        <CommentSection :post-id="id"></CommentSection>
+
+        <CommentSection :post-id="id" :user="authUser"></CommentSection>
     </div>
 </template>
 
@@ -48,7 +49,7 @@ export default {
     data() {
         return {
             post: null,
-            user: window.authUser || null,
+            authUser: null,
         };
     },
     components: {
@@ -92,6 +93,7 @@ export default {
         },
     },
     mounted() {
+        this.authUser = window.authUser ?? null;
         this.fetchPost();
     },
 };

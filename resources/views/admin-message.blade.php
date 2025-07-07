@@ -10,7 +10,12 @@
                     <p><strong>Name:</strong> {{ $message->name }}</p>
                     <p><strong>Email:</strong> {{ $message->email }}</p>
                     <p><strong>Message:</strong> {{ $message->message }}</p>
+                    <a href="{{ route('messages.show', $message->id) }}"
+                        class="text-blue-600 hover:underline mt-2 mb-2 inline-block">
+                        View & Reply →
+                    </a>
                     <p class="text-sm text-gray-500">Sent at: {{ $message->created_at->format('F j, Y, g:i a') }}</p>
+
                 </div>
             @endforeach
         @endif

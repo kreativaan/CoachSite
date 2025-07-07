@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Comment;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
@@ -53,6 +55,25 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::get('/admin/messages', [MessageController::class, 'index']);
     Route::get('/api/messages/count', function () {
         return response()->json(['count' => \App\Models\Message::count()]);
+    });
+    Route::get('/admin/messages/{id}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('admin/messages/{id}/reply', [MessageController::class, 'reply'])->name('messages.reply');
+    //comment admin
+    // Add this group inside the admin middleware group
+
+    Route::match(['POST', 'DELETE'], '/api/comments/{id}/reply', function ($id, Illuminate\Http\Request $request) {
+        $comment = \App\Models\Comment::findOrFail($id);
+
+        if ($request->isMethod('delete')) {
+            $comment->admin_reply = null;
+            $comment->save();
+            return response()->json(['message' => 'Reply deleted']);
+        }
+
+        $comment->admin_reply = $request->input('admin_reply');
+        $comment->save();
+
+        return response()->json(['message' => 'Reply submitted']);
     });
 });
 
