@@ -13,7 +13,49 @@
             class="mb-4 p-4 border rounded-md bg-green-50"
         >
             <p class="font-semibold">{{ comment.name }}</p>
-            <p class="text-gray-700">{{ comment.content }}</p>
+
+            <!-- user can edit comment -->
+            <p class="text-gray-700" v-if="editingCommentId !== comment.id">
+                {{ comment.content }}
+            </p>
+            <div v-else class="mt-2">
+                <textarea
+                    v-model="editingContent"
+                    rows="2"
+                    class="w-full p-2 border rounded"
+                ></textarea>
+                <div class="flex gap-2 mt-2">
+                    <button
+                        @click="updateComment(comment.id)"
+                        class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                    >
+                        Save
+                    </button>
+                    <button
+                        @click="cancelEdit"
+                        class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+            <div
+                v-if="user && user.id === comment.user_id"
+                class="flex gap-2 mt-2"
+            >
+                <button
+                    @click="editComment(comment)"
+                    class="text-sm text-blue-600 hover:underline"
+                >
+                    Edit
+                </button>
+                <button
+                    @click="deleteComment(comment.id)"
+                    class="text-sm text-red-600 hover:underline"
+                >
+                    Delete
+                </button>
+            </div>
 
             <!-- Show admin reply if it exists -->
             <div
@@ -102,37 +144,45 @@
             </div>
         </div>
 
-        <form @submit.prevent="submitComment" class="mt-12">
-            <h4 class="text-lg font-medium mb-2">Leave a Comment</h4>
+        <div class="mt-12">
+            <div v-if="user">
+                <form @submit.prevent="submitComment">
+                    <h4 class="text-lg font-medium mb-2">Leave a Comment</h4>
 
-            <div class="mb-3">
-                <input
-                    type="text"
-                    v-model="form.name"
-                    placeholder="Your name"
-                    class="w-full border rounded p-2 bg-gray-100"
-                    required
-                />
+                    <input type="hidden" v-model="form.name" />
+
+                    <div class="mb-3">
+                        <textarea
+                            v-model="form.content"
+                            placeholder="Your comment"
+                            class="w-full border rounded p-2 bg-gray-100"
+                            required
+                        ></textarea>
+                    </div>
+                    <button
+                        type="submit"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Submit Comment
+                    </button>
+                    <SuccessMessage :message="successMessage" />
+                </form>
             </div>
-
-            <div class="mb-3">
-                <textarea
-                    v-model="form.content"
-                    placeholder="Your comment"
-                    class="w-full border rounded p-2 bg-gray-100"
-                    required
-                ></textarea>
-            </div>
-
-            <button
-                type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            <div
+                v-else
+                class="bg-yellow-100 border border-yellow-300 p-4 rounded"
             >
-                Submit Comment
-            </button>
-
-            <SuccessMessage :message="successMessage" />
-        </form>
+                <p class="text-yellow-800">
+                    You must
+                    <a href="/login" class="underline text-blue-600">log in</a>
+                    or
+                    <a href="/register" class="underline text-blue-600"
+                        >register</a
+                    >
+                    to leave a comment.
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -152,6 +202,8 @@ export default {
                 content: "",
             },
             successMessage: "",
+            editingCommentId: null,
+            editingContent: "",
         };
     },
     components: {
@@ -283,9 +335,72 @@ export default {
                 console.error("Delete failed:", err);
             }
         },
+        editComment(comment) {
+            this.editingCommentId = comment.id;
+            this.editingContent = comment.content;
+        },
+
+        cancelEdit() {
+            this.editingCommentId = null;
+            this.editingContent = "";
+        },
+
+        async updateComment(commentId) {
+            try {
+                const response = await fetch(`/comments/${commentId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                    body: JSON.stringify({
+                        content: this.editingContent,
+                    }),
+                });
+
+                if (!response.ok) throw new Error("Failed to update comment");
+
+                this.editingCommentId = null;
+                this.editingContent = "";
+                this.fetchComments();
+            } catch (err) {
+                console.error("Update failed:", err);
+            }
+        },
+
+        async deleteComment(commentId) {
+            if (!confirm("Are you sure you want to delete this comment?"))
+                return;
+
+            try {
+                const response = await fetch(`/comments/${commentId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                    },
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("Error from server:", data);
+                    throw new Error("Failed to delete comment");
+                }
+
+                this.fetchComments();
+            } catch (err) {
+                console.error("Delete failed:", err);
+            }
+        },
     },
     mounted() {
-        console.log("User passed to CommentSection:", this.user);
+        if (this.user) {
+            this.form.name = this.user.name;
+        }
         this.fetchComments();
     },
 };

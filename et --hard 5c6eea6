@@ -1,0 +1,18 @@
+[33mf797971[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m added files for render host
+[33m5c6eea6[m added reply to post comments, also edit delete replyes
+[33me6f22ef[m updated login, register form, added logout button, updated admin dashboard
+[33mcae37be[m updated search bar - added debounce method, added no result found
+[33m8e65090[m added search bar, updated blog list and blog preview
+[33mca861a4[m added inbox notification
+[33m94471c1[m Added admin inbox, added components
+[33mf87e0a3[m addet admin auth
+[33mf1f3a6f[m Added breeze, fixed tailwind
+[33md2bca6b[m added comment section and home page
+[33m65ca4b3[m added blog post
+[33mc5e22ff[m Make trainer profile editable and remove multiple-trainer support
+[33mb86f98f[m Add Trainer model and save profile data to database and nav bar
+[33m9d140a0[m Added contact form
+[33m9ed6812[m Added trainer profile form with vue and laravel post handler
+[33md74bd0b[m Fixed vue template compiler issue with vite alias
+[33mbe5943d[m Added about page with controller and view
+[33m304a833[m Initial Laravel Install
