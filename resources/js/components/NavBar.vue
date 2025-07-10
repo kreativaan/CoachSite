@@ -6,6 +6,12 @@
         <a href="/about">About</a>
         <a href="/blog">Blog</a>
         <a href="/contact">Contact</a>
+
+        <a v-if="!user" href="/login" class="absolute right-24 top-1">Login</a>
+        <a v-if="!user" href="/register" class="absolute right-5 top-1"
+            >Register</a
+        >
+
         <!-- if logged in -->
         <a v-if="user && user.is_admin" href="/trainer">Edit trainer</a>
         <a v-if="user && user.is_admin" href="/admin/blog">Create a post</a>
