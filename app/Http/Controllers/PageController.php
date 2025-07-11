@@ -85,6 +85,8 @@ class PageController extends Controller
         return response()->json($trainer);
     }
 
+
+
     public function publicProfile()
     {
         $trainer = Trainer::first();

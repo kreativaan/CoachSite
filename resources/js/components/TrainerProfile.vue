@@ -1,42 +1,65 @@
 <template>
-    <div
-        class="bg-white py-8 max-w-2xl rounded-xl flex justify-center mx-auto mb-20 shadow-md mt-16"
-    >
-        <form @submit.prevent="submitForm">
-            <h2>Trainer Profile</h2>
+    <div class="bg-white py-10 px-6 max-w-2xl rounded-xl mx-auto mt-16 shadow">
+        <form @submit.prevent="submitForm" class="space-y-6">
+            <h2 class="text-2xl font-bold mb-4 text-center">Trainer Profile</h2>
+
             <div>
-                <label>Name:</label>
-                <input type="text" v-model="form.name" />
+                <label class="block font-semibold mb-1">Name</label>
+                <input
+                    type="text"
+                    v-model="form.name"
+                    class="w-full border rounded-lg px-4 py-2 bg-gray-100"
+                />
             </div>
 
             <div v-if="form.profile_photo">
-                <h4 class="font-semibold mb-2">Current Profile Photo:</h4>
+                <p class="font-semibold mb-2">Current Profile Photo:</p>
                 <img
-                    class="w-48 rounded-lg shadow-lg"
                     :src="`/uploads/${form.profile_photo}`"
+                    class="w-48 rounded-lg shadow mb-4"
                 />
             </div>
 
             <div>
-                <label>Profile photo:</label>
+                <label class="block font-semibold mb-1">Profile Photo</label>
                 <input type="file" @change="handleFileUpload" />
             </div>
 
             <div>
-                <label>Bio:</label>
-                <textarea v-model="form.bio"></textarea>
+                <label class="block font-semibold mb-1">Bio</label>
+                <textarea
+                    v-model="form.bio"
+                    class="w-full border rounded-lg px-4 py-2 bg-gray-100 min-h-[120px]"
+                ></textarea>
             </div>
+
             <div>
-                <label>Specialty:</label>
-                <input type="text" v-model="form.specialty" />
+                <label class="block font-semibold mb-1">Specialty</label>
+                <input
+                    type="text"
+                    v-model="form.specialty"
+                    class="w-full border rounded-lg px-4 py-2 bg-gray-100"
+                />
             </div>
 
             <div>
-                <label>Years Experience:</label>
-                <input type="number" v-model="form.years_experience" />
+                <label class="block font-semibold mb-1"
+                    >Years of Experience</label
+                >
+                <input
+                    type="number"
+                    v-model="form.years_experience"
+                    class="w-full border rounded-lg px-4 py-2 bg-gray-100"
+                />
             </div>
 
-            <button type="submit">Save Profile</button>
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+            >
+                Save Profile
+            </button>
+
             <SuccessMessage :message="successMessage" />
         </form>
     </div>
@@ -44,6 +67,7 @@
 
 <script>
 import SuccessMessage from "./SuccessMessage.vue";
+
 export default {
     data() {
         return {
@@ -52,7 +76,9 @@ export default {
                 bio: "",
                 specialty: "",
                 years_experience: 0,
+                profile_photo: "", // ✅ make sure this exists from the start
             },
+            profilePhotoFile: null,
             successMessage: "",
         };
     },
@@ -70,8 +96,11 @@ export default {
                 for (let key in this.form) {
                     formData.append(key, this.form[key]);
                 }
+
                 if (this.profilePhotoFile) {
                     formData.append("profile_photo", this.profilePhotoFile);
+                } else if (this.form.profile_photo) {
+                    formData.append("existing_photo", this.form.profile_photo);
                 }
 
                 const response = await fetch("/trainer-profile", {
@@ -81,73 +110,37 @@ export default {
                             .querySelector('meta[name="csrf-token"]')
                             .getAttribute("content"),
                     },
-
                     body: formData,
                 });
 
-                if (!response.ok) {
-                    throw new Error("Failed to submit form");
-                }
+                if (!response.ok) throw new Error("Failed to submit form");
 
                 const data = await response.json();
                 this.successMessage = data.message;
-                this.getTrainers();
+                this.getTrainer();
             } catch (error) {
                 console.error(error);
             }
         },
+
         async getTrainer() {
             try {
-                const response = await fetch("/trainer-profile");
+                const response = await fetch("api/trainer");
                 const data = await response.json();
 
-                // Fill the form with existing trainer data
-                this.form = {
-                    name: data.name || "",
-                    bio: data.bio || "",
-                    specialty: data.specialty || "",
-                    years_experience: data.years_experience || 0,
-                    profile_photo: data.profile_photo || "",
-                };
+                // ✅ assign fields one-by-one to preserve reactivity
+                this.form.name = data.name || "";
+                this.form.bio = data.bio || "";
+                this.form.specialty = data.specialty || "";
+                this.form.years_experience = data.years_experience || 0;
+                this.form.profile_photo = data.profile_photo || "";
             } catch (error) {
                 console.error("Failed to fetch trainer data", error);
             }
         },
     },
     mounted() {
-        this.getTrainer(); // Load the profile when page opens
+        this.getTrainer();
     },
 };
 </script>
-
-<style scoped>
-h2 {
-    font-weight: bold;
-}
-
-label {
-    margin: 10px 0;
-    display: block;
-    font-weight: 600;
-}
-textarea {
-    min-height: 150px;
-}
-
-input,
-textarea {
-    display: block;
-    margin-bottom: 20px;
-    padding: 10px;
-    width: 300px;
-    background-color: rgb(238, 236, 236);
-    border-radius: 10px;
-}
-button {
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 6px;
-}
-</style>

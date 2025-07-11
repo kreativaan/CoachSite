@@ -16,6 +16,32 @@ Route::get('/', [PageController::class, 'home']);
 Route::get('/about', [PageController::class, 'publicProfile']);
 Route::get('/contact', [PageController::class, 'contact']);
 Route::post('/contact', [PageController::class, 'sendMessage'])->middleware('throttle:contact-form');
+//services
+Route::get('/services/{slug}', function ($slug) {
+    $services = [
+        'personal-training' => [
+            'title' => '1-on-1 Personal Training',
+            'description' => 'Detailed description, goals, how it works, pricing, scheduling, etc.',
+        ],
+        'group-training' => [
+            'title' => 'Group Training',
+            'description' => 'Fun and challenging workouts in a group environment.',
+        ],
+        'online-coaching' => [
+            'title' => 'Online Coaching',
+            'description' => 'Train remotely with custom plans, video calls, and support.',
+        ],
+    ];
+
+    if (!isset($services[$slug])) {
+        abort(404);
+    }
+
+    return view('services-show', [
+        'service' => $services[$slug],
+    ]);
+});
+
 
 // ------------------
 // Blog
@@ -48,6 +74,8 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::delete('/api/posts/{id}', [PostController::class, 'destroy']);
 
     // Trainer Profile (admin)
+    Route::get('/api/trainer', [PageController::class, 'getTrainer']);
+
     Route::get('/trainer', [PageController::class, 'trainer']);
     Route::post('/trainer-profile', [PageController::class, 'saveTrainerProfile']);
 
