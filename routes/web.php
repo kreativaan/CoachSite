@@ -15,7 +15,7 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', [PageController::class, 'home']);
 Route::get('/about', [PageController::class, 'publicProfile']);
 Route::get('/contact', [PageController::class, 'contact']);
-Route::post('/contact', [PageController::class, 'sendMessage']);
+Route::post('/contact', [PageController::class, 'sendMessage'])->middleware('throttle:contact-form');
 
 // ------------------
 // Blog

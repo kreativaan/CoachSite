@@ -20,12 +20,14 @@
             <button class="mb-8" type="submit">Send</button>
             <div class="pb-10">
                 <SuccessMessage :message="successMessage" />
+                <ErrorMessage :message="errorMessage" />
             </div>
         </form>
     </div>
 </template>
 
 <script>
+import ErrorMessage from "./ErrorMessage.vue";
 import SuccessMessage from "./SuccessMessage.vue";
 export default {
     data() {
@@ -36,13 +38,17 @@ export default {
                 message: "",
             },
             successMessage: "",
+            errorMessage: "",
         };
     },
     components: {
         SuccessMessage,
+        ErrorMessage,
     },
     methods: {
         async submitForm() {
+            this.successMessage = "";
+            this.errorMessage = "";
             try {
                 const response = await fetch("/contact", {
                     method: "POST",
@@ -55,14 +61,25 @@ export default {
                     body: JSON.stringify(this.form),
                 });
 
+                if (response.status === 429) {
+                    this.errorMessage =
+                        "You're sending messages too quickly. Please try again later.";
+                    return;
+                }
+
                 if (!response.ok) {
                     throw new Error("Something went wrong");
                 }
 
                 const data = await response.json();
                 this.successMessage = data.message;
+
+                this.form.name = "";
+                this.form.email = "";
+                this.form.message = "";
             } catch (error) {
                 console.error(error);
+                this.successMessage = "Something went wrong. Please try again.";
             }
         },
     },
