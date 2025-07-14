@@ -27,19 +27,25 @@ class PageController extends Controller
 
     public function saveTrainerProfile(Request $request)
     {
-        // Validate the incoming data
+
+        // If no new file, but existing_photo was sent, merge it into the request
+        if (!$request->hasFile('profile_photo') && $request->filled('existing_photo')) {
+            $request->merge(['profile_photo' => $request->input('existing_photo')]);
+        }
+
+        // validate
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'bio' => 'nullable|string',
             'specialty' => 'nullable|string|max:255',
             'years_experience' => 'nullable|integer|min:0',
-            'profile_photo' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // Limit file size and types
+            'profile_photo' => 'nullable|string',
         ]);
 
         try {
             $trainer = Trainer::first();
 
-            // Handle photo upload if file exists
+            // Handle new photo upload
             if ($request->hasFile('profile_photo')) {
                 $file = $request->file('profile_photo');
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -47,7 +53,7 @@ class PageController extends Controller
                 $validated['profile_photo'] = $filename;
             }
 
-            // Update or create trainer data
+            // Update or create
             if ($trainer) {
                 $trainer->update($validated);
             } else {
@@ -56,10 +62,10 @@ class PageController extends Controller
 
             return response()->json(['message' => 'Trainer profile updated']);
         } catch (\Exception $e) {
-            // Return a more useful error message
             return response()->json(['error' => 'Failed to save profile: ' . $e->getMessage()], 500);
         }
     }
+
 
     public function contact()
     {
