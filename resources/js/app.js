@@ -6,7 +6,7 @@ Alpine.start();
 import './bootstrap';
 import { createApp } from 'vue';
 
-import Servises from './components/Servises.vue';
+import Services from './components/Services.vue';
 import TrainerProfile from './components/TrainerProfile.vue';
 import ContactForm from './components/ContactForm.vue';
 import NavBar from './components/NavBar.vue';
@@ -18,7 +18,7 @@ import BlogPreview from './components/BlogPreview.vue';
 
 const app = createApp({});
 
-app.component('services', Servises);
+app.component('services', Services);
 app.component('trainer-profile', TrainerProfile);
 app.component('contact-form', ContactForm);
 app.component('nav-bar', NavBar);
