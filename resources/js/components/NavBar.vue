@@ -4,11 +4,10 @@
             class="max-w-7xl mx-auto px-4 flex items-center justify-between h-14"
         >
             <!-- Left: Logo -->
-            <div class="text-xl font-bold">FitCoach</div>
+            <a href="/" class="text-xl font-bold">FitCoach</a>
 
             <!-- Center: Nav Links (desktop only) -->
             <div class="hidden md:flex gap-6 font-semibold text-yellow-50">
-                <NavLink href="/" text="Home" />
                 <NavLink href="/about" text="About" />
                 <NavLink href="/blog" text="Blog" />
                 <NavLink href="/contact" text="Contact" />
