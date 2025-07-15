@@ -2,7 +2,8 @@ FROM php:8.2-apache
 
 # Install required system packages
 RUN apt-get update && apt-get install -y \
-    git unzip curl libpng-dev libonig-dev libxml2-dev zip npm nodejs \
+    git unzip curl libpng-dev libonig-dev libxml2-dev zip \
+    nodejs npm \
     && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
 # Enable Apache rewrite module
@@ -17,7 +18,10 @@ COPY . .
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Laravel permissions
+# Make build.sh executable and run it
+RUN chmod +x ./build.sh && ./build.sh
+
+# Laravel file permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
