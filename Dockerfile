@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
 
 # Enable Apache rewrite module
 RUN a2enmod rewrite
+RUN touch /var/www/html/database/database.sqlite
 
 # Set working directory
 WORKDIR /var/www/html
